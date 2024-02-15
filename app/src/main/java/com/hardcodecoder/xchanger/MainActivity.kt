@@ -51,7 +51,7 @@ fun MainScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         val viewModel = viewModel<MainViewModel>()
-        var sourceValue by remember { mutableStateOf("0.0") }
+        var sourceValue by remember { mutableStateOf("0") }
 
         OptionTextField(
             label = "From",

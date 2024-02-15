@@ -16,8 +16,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var exchangeRates: ExchangeRate
     private var sourceRate = "INR"
     private var targetRate = "INR"
-    private var inputAmount: Float? = 0.0f
-    private var targetAmount = mutableFloatStateOf(0.0f)
+    private var inputAmount: Float? = 0f
+    private var targetAmount = mutableFloatStateOf(0f)
     val result by targetAmount.asFloatState()
     val availableRates = mutableStateListOf<String>()
 
@@ -29,20 +29,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun submitInput(text: String) {
         inputAmount = text.toFloatOrNull()
-        recalculate()
+        calculate()
     }
 
     fun sourceRate(rate: String) {
         sourceRate = rate
-        recalculate()
+        calculate()
     }
 
     fun targetRate(rate: String) {
         targetRate = rate
-        recalculate()
+        calculate()
     }
 
-    private fun recalculate() {
+    private fun calculate() {
         val amountInINR = inputAmount?.div(exchangeRates.rates[sourceRate] ?: 1.0f)
         targetAmount.floatValue =
             amountInINR?.times(exchangeRates.rates[targetRate] ?: 1.0f) ?: 0.0f
@@ -50,12 +50,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private suspend fun availableExchangeRates() {
         withContext(Dispatchers.IO) {
-            exchangeRates = ExchangeRateRepo().fetchLatestRates()
-
             val tempList = mutableListOf<String>()
-            exchangeRates.rates.forEach {
-                tempList.add(it.key)
-            }
+            exchangeRates = ExchangeRateRepo().fetchExchangeRates()
+            exchangeRates.rates.forEach { tempList.add(it.key) }
             availableRates.addAll(tempList.sorted())
         }
     }
