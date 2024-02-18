@@ -48,6 +48,8 @@ android {
 }
 
 dependencies {
+    val okhttp = "4.12.0"
+
     // AndroidX components
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -62,7 +64,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     // IO
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:$okhttp")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // Testing
@@ -73,4 +75,5 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation("com.squareup.okhttp3:mockwebserver:$okhttp")
 }
