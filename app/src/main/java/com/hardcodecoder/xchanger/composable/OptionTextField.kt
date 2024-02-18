@@ -70,7 +70,7 @@ fun OptionField(
     onOptionChanged: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    var selectedOption by remember { mutableStateOf(options.getOrElse(0) { "" }) }
 
     ExposedDropdownMenuBox(
         modifier = modifier,
