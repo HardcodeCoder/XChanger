@@ -1,17 +1,16 @@
 package com.hardcodecoder.xchanger
 
-import android.app.Application
 import androidx.compose.runtime.asFloatState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel : ViewModel() {
 
     private lateinit var exchangeRates: ExchangeRate
     private var sourceRate = "INR"
@@ -43,15 +42,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun calculate() {
-        val amountInINR = inputAmount?.div(exchangeRates.rates[sourceRate] ?: 1.0f)
+        val amountInINR = inputAmount?.div(exchangeRates.rates[sourceRate] ?: 1f)
         targetAmount.floatValue =
-            amountInINR?.times(exchangeRates.rates[targetRate] ?: 1.0f) ?: 0.0f
+            amountInINR?.times(exchangeRates.rates[targetRate] ?: 1f) ?: 0f
     }
 
     private suspend fun availableExchangeRates() {
         withContext(Dispatchers.IO) {
             val tempList = mutableListOf<String>()
-            exchangeRates = ExchangeRateRepo().fetchExchangeRates()
+            exchangeRates = ExchangeRateApiClient().fetchLatestRates()
             exchangeRates.rates.forEach { tempList.add(it.key) }
             availableRates.addAll(tempList.sorted())
         }
