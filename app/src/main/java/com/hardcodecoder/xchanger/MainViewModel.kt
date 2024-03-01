@@ -48,11 +48,14 @@ class MainViewModel : ViewModel() {
     }
 
     private suspend fun availableExchangeRates() {
-        withContext(Dispatchers.IO) {
+        exchangeRates = ExchangeRateApiClient().fetchLatestRates()
+        addRatesSorted(exchangeRates)
+    }
+
+    private suspend fun addRatesSorted(exchangeRate: ExchangeRate) =
+        withContext(Dispatchers.Default) {
             val tempList = mutableListOf<String>()
-            exchangeRates = ExchangeRateApiClient().fetchLatestRates()
-            exchangeRates.rates.forEach { tempList.add(it.key) }
+            exchangeRate.rates.forEach { tempList.add(it.key) }
             availableRates.addAll(tempList.sorted())
         }
-    }
 }
