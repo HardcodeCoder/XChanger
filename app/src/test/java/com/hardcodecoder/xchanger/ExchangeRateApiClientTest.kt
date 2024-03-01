@@ -1,5 +1,6 @@
 package com.hardcodecoder.xchanger
 
+import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -21,7 +22,7 @@ class ExchangeRateApiClientTest {
     }
 
     @Test
-    fun fetchExchangeRate_WithValidResponse() {
+    fun fetchExchangeRate_WithValidResponse() = runTest {
         val mockResponse = MockResponse()
             .setResponseCode(200)
             .setBody(
@@ -49,7 +50,7 @@ class ExchangeRateApiClientTest {
     }
 
     @Test
-    fun fetchExchangeRate_WithEmptyBody() {
+    fun fetchExchangeRate_WithEmptyBody() = runTest {
         val mockResponse = MockResponse()
             .setResponseCode(401)
             .setBody(
